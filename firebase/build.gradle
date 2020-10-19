@@ -43,5 +43,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     api "com.google.firebase:firebase-database:19.5.0"
-    api "androidx.work:work-rxjava2:2.4.0"
+    api "io.reactivex.rxjava2:rxjava:2.2.17"
+    api "io.reactivex.rxjava3:rxjava:3.0.7"
 }
