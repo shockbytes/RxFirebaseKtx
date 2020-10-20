@@ -1,6 +1,6 @@
 # RxFirebaseKtx
 
-Handy Kotlin extension functions to use Firebase with reactive extensions.
+Handy Kotlin extension functions for using Firebase Database in combination with RxJava.
 
 # Sample usage
 
