@@ -3,6 +3,8 @@
 Handy Kotlin extension functions to use Firebase with reactive extensions.
 
 # Sample usage
+
+Consider this `SampleContent` class used for all further operations.
 ```Kotlin
     data class SampleContent(
         val id: String = "",
@@ -15,20 +17,25 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
 
     private val firebaseDatabase = FirebaseDatabase.getInstance().reference.database
 
+```
 
+### Forward changes of a collection
+```Kotlin
     fun listSubjectFromFirebase() {
 
         val subject = PublishSubject.create<List<SampleContent>>()
 
         subject.fromFirebase(
             dbRef = firebaseDatabase.getReference("sample_content"),
-            changedChildKeySelector = { it.id },
+            changedChildKeySelector = { it.id }, // Consider the field id as unique for SampleContent
             cancelHandler = { dbError ->
                 Timber.e(dbError.toException())
             }
         )
     }
-
+```
+### Listen for changes in a collection, directly on the reference
+```Kotlin
     fun listFromFirebaseDatabaseListen() {
 
         val subject = PublishSubject.create<List<SampleContent>>()
@@ -42,7 +49,10 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
             }
         )
     }
+```
 
+### Forward changes of a single value
+```Kotlin
     fun singleValueSubjectFromFirebase() {
 
         val subject = PublishSubject.create<SampleContent>()
@@ -54,7 +64,10 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
             }
         )
     }
+```
 
+### Listen for changes of a single value, directly on the reference
+```Kotlin
     fun fromFirebaseDatabaseListenForValue() {
 
         val subject = PublishSubject.create<SampleContent>()
@@ -68,14 +81,20 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
             }
         )
     }
+```
 
+### Insert a new value in the database
+```Kotlin
     fun firebaseDatabaseInsertValue() {
 
         val update = SampleContent(content = "This library is awesome!")
 
         firebaseDatabase.insertValue(reference = "sample_content", value = update)
     }
+```
 
+### Update a value in the database
+```Kotlin
     fun firebaseDatabaseUpdateValue() {
 
         val update = SampleContent(id = "id1", content = "This library is awesome!")
@@ -86,7 +105,10 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
             value = update
         )
     }
+```
 
+### Delete a child value in the database
+```Kotlin
     fun firebaseDatabaseRemoveChildValue() {
 
         val update = SampleContent(id = "id1", content = "This library is awesome!")
@@ -96,7 +118,11 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
             childId = update.id
         )
     }
+```
 
+### Wrap the deletion of a value into a `Completable`
+
+```Kotlin
     fun firebaseDatabaseReactiveRemoveValue() {
 
         val update = SampleContent(id = "id1", content = "This library is awesome!")
@@ -106,4 +132,4 @@ Handy Kotlin extension functions to use Firebase with reactive extensions.
                 Timber.d("Successfully removed ${update.id}!")
             }
     }
-    ```
+```
